@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./lib/images/icon/logo.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./lib/css/public.css">
+    <link rel="stylesheet" href="./lib/css/login.css">
+    <link rel="stylesheet" href="./lib/css/移动端/login_phone.css">
+    <title>请登录！</title>
+</head>
+<script src="./lib/js/jquery-3.5.1.min.js"></script>
+<script src=" ./lib/js/jquery-3.5.1.js"> </script>
+
+<body>
+
+    <div id="box">
+        <!-- 页眉 -->
+        <div id="header">
+            <div class="main">
+                <div class="b_log"></div>
+                <div class="title">
+                    <span>学生管理系统</span>
+                </div>
+                <div class="big_form">
+
+                    <form action="">
+
+                        <table>
+                            <tr>
+                                <td> <label for=" ">用户名：</label></td>
+                                <td>
+                                    <input type="text" class="uname" name="user_name" pattern="\w{6,12}" required />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label> 密&nbsp;&nbsp;码：</label>
+                                </td>
+                                <td>
+                                    <input type="password" class="pawd" name="password" pattern="\w{6,10}" required />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <select name="select" id="manage">
+                                        <option value="1">教师</option>
+                                        <option value="2">学生</option>
+                                        <option value="3">管理员</option>
+                                    </select>
+                                    <input class="btn" type="button" id="login_btn" name="" value="登录" />
+                                    <input class="btn" type="reset" id="sign_btn" name="" value="重置" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <a href="./lib/view/register.html">还没有账号？立即注册</a>
+                </div>
+            </div>
+        </div>
+        <!-- 页脚 -->
+        <div id="footer"></div>
+    </div>
+    <script>
+        $(function () {
+            var people;
+            $('#login_btn').on('click', function () {
+                if ($('.uname').val() == " " || $('.pawd').val() == " ") {
+                    alert('用户名及密码不能为空！');
+                } else {
+                    //获取用户的属性
+                    switch ($("#manage").val()) {
+                        case "1":
+                            people = "教师";
+                            break;
+                        case "2":
+                            people = "学生";
+                            break;
+                        case "3":
+                            people = "管理员";
+                            break;
+                    }
+                    // alert(people);
+
+                    //发送数据
+                    $.ajax({
+                        url: './lib/common/login.php',
+                        type: 'post',
+                        // data: "userName=" + $('.uname').val() + "&password=" + $('.pawd')
+                        //     .val() + "&people=" + $("#manage").val(),
+                        data: {
+                            "userName": $('.uname').val(),
+                            "password": $('.pawd').val(),
+                            "people": $("#manage").val()
+                        },
+                        success: function (mes) {
+                            //登录成功跳转
+                            switch (mes) {
+                                case "1":
+                                    window.location.href =
+                                        "http://127.0.0.1/StudentManagementSystem/lib/admin/view/.php";
+                                    alert("欢迎你！" + $('.uname').val());
+                                    break;
+                                case "2":
+                                    window.location.href =
+                                        "http://127.0.0.1/StudentManagementSystem/lib/admin/view/homepage.php";
+                                    alert("欢迎你！" + $('.uname').val());
+                                    break;
+                                case "3":
+                                    window.location.href = "./lib/admin/conf/index.php";
+                                    alert("欢迎你！" + $('.uname').val());
+                                    break;
+                                default:
+                                    alert(mes);
+                                    break;
+                            }
+                        },
+                        error: function () {
+                            alert('服务器未连接！');
+                        }
+                    });
+
+                    //
+                }
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
